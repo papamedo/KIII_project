@@ -1,0 +1,48 @@
+version: "3"
+
+services:
+  app:
+    image: 'docker-spring-boot-image'
+    restart: always
+    container_name: 'app'
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    ports:
+      - "8080:9876"
+
+    environment:
+      - spring.profiles.active=dock
+   
+    depends_on:
+      - db
+
+    networks:
+      - spring_network
+    
+  db:
+    image: 'postgres:13.1-alpine'
+    restart: always
+    container_name: db
+
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres-dev
+      - POSTGRES_PASSWORD=wplab
+      - POSTGRES_DB=university
+
+    volumes:
+      - ../spring_db_data:/var/lib/postgresql/data
+
+    networks:
+      - spring_network
+      
+networks:
+  spring_network:
+    name: spring_network
+    driver: bridge 
+
+volumes:
+  spring_db_data: {}
