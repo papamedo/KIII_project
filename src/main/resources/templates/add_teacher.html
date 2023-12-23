@@ -1,0 +1,29 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Create a New Student Page</title>
+</head>
+<body>
+<header>
+    <h1>Create or Edit Course</h1>
+</header>
+<form th:method="POST" th:action="@{'/teachers/add/{id}'(id=${teacher != null ? teacher.getId() : 0})}">
+
+    </br>
+    </br>
+    <label for='name'>Name:</label>
+    <input id='name' type='text' name='name' th:value="(${teacher} != null ? ${teacher.getPersonName().getName()} : '')"/>
+    </br>
+    </br>
+    <label for='surname'>Surname:</label>
+    <input id='surname' type='text' name='surname' th:value="(${teacher} != null ? ${teacher.getPersonName().getSurname()} : '')"/>
+    </br>
+    </br>
+    <input id='date' type='date' name='date' th:value="(${teacher} != null ? ${teacher.getDateOfEmployment()} : '')"/>
+    </br>
+    </br>
+    <input type='submit' value='Submit'/>
+</form>
+</section>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Welcome and Choose a Course</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Courses List</h1>
+</header>
+<main>
+    <h2>Choose course:</h2>
+    </br>
+    </br>
+    <a href="/teachers" style="font-size: medium"><b>Teachers</b></a>
+    </br>
+    </br>
+    <form th:method="POST" th:action="@{/listCourses}">
+        <table>
+            <thead>
+            <tr>
+                <th>Select</th>
+                <th>Course</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="course : ${listcourses}">
+                <td>
+                    <input type="radio" name="courseId" th:value="${course.getCourseId()}">
+                </td>
+                <td>
+                    <th:block th:text="${course.getName()}"></th:block>
+                </td>
+                <td>
+                    <a th:href="@{'/courses/edit-form/{id}' (id=${course.getCourseId()})}">Edit</a>
+                </td>
+                <td>
+                    <a th:href="@{'/courses/delete/{id}' (id=${course.getCourseId()})}">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br/>
+        <input type="submit" value="Submit">
+
+    </form>
+    <div th:if="${pageble}">
+        <a th:href="@{'/courses/pageble' (number=${num - 1})}">Prev</a>
+        <a th:href="@{'/courses/pageble' (number=${num + 1})}">Next</a><br/>
+    </div>
+
+
+    </br>
+    <button onclick="location.href='/courses/add-form'">Add Course</button>
+    </br>
+    </br>
+    </br>
+    </br>
+    <div th:if="${hasError}">
+        <div th:text="${errormessage}"></div>
+    </div>
+</main>
+</body>
+</html>
