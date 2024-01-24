@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-boot-conf-map
+  namespace: spring-boot-dev
+data:
+  profile: dev
+  database-host: spring-boot-db-svc:5432
+  database-database: university
+  database-username: postgres-dev
+  database-password: wplab
+

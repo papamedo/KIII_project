@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-boot-app
+  namespace: spring-boot-dev
+spec:
+  replicas: 5
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: spring-boot-app
+  template:
+    metadata:
+      namespace: spring-boot-dev
+      labels:
+        app: spring-boot-app
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: spring-boot-app
+        image: papamedo/docker-spring-boot-image:1.2
+        env:
+          - name: spring.profiles.active
+            valueFrom:
+              configMapKeyRef:
+                name: spring-boot-conf-map
+                key: profile
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: spring-boot-conf-map
+                key: database-host
+          - name: DB_DATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: spring-boot-conf-map
+                key: database-database
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: spring-boot-secret
+                key: database-username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: spring-boot-secret
+                key: database-password
+        resources:
+          limits:
+            memory: 1Gi
+            cpu: "500m"
+        ports:
+        - containerPort: 9876

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-boot-db-svc
+  namespace: spring-boot-dev
+  labels:
+    app: spring-boot-db-svc
+spec:
+  selector:
+    app: spring-boot-db
+  ports:
+  - name: postgres
+    protocol: TCP
+    port: 5432
+    targetPort: 5432

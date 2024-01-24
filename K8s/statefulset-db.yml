@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: spring-boot-db
+  namespace: spring-boot-dev
+  labels:
+    app: spring-boot-db
+spec:
+  serviceName: spring-boot-db
+  selector:
+    matchLabels:
+      app: spring-boot-db
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: spring-boot-db
+    spec:
+      containers:
+        - name: spring-boot-db
+          image: postgres:13.1-alpine
+          ports:
+            - containerPort: 5432
+              name: "postgres"
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: spring-boot-conf-map
+                  key: database-database
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: spring-boot-secret
+                  key: database-username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: spring-boot-secret
+                  key: database-password
+          resources:
+            limits:
+              memory: 1Gi
+              cpu: "2"
+          volumeMounts:
+            - name: spring-boot-db-volume
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: spring-boot-db-volume
+          persistentVolumeClaim:
+            claimName: spring-boot-db-volume-claim
